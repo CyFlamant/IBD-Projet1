@@ -1,0 +1,47 @@
+CREATE TABLE IF NOT EXISTS Serveur (
+NumServeur INTEGER PRIMARY KEY,
+NomServeur TEXT NOT NULL
+) ;
+
+CREATE TABLE IF NOT EXISTS TableResto (
+NumTable INTEGER PRIMARY KEY
+) ; 
+
+CREATE TABLE IF NOT EXISTS Article (
+NumArticle INTEGER PRIMARY KEY,
+Libelle TEXT NOT NULL,
+TypeArticle TEXT NOT NULL,
+Prix INTEGER NOT NULL,
+TauxTVA INTEGER NOT NULL
+) ;
+
+CREATE TABLE IF NOT EXISTS Affectation (
+NumAffectation INTEGER PRIMARY KEY,
+NumServeur INTEGER NOT NULL REFERENCES Serveur(NumServeur),
+NumTable INTEGER NOT NULL REFERENCES TableResto(NumTable),
+DateAffectation TEXT NOT NULL,
+UNIQUE (NumTable, DateAffectation)
+) ;
+
+CREATE TABLE IF NOT EXISTS Commande (
+NumCommande INTEGER PRIMARY KEY,
+NumAffectation INTEGER NOT NULL REFERENCES Affectation(NumAffectation),
+Heure TEXT NOT NULL
+) ;
+
+CREATE TABLE IF NOT EXISTS Paiement (
+NumPaiement INTEGER PRIMARY KEY,
+MontantPaye INTEGER NOT NULL,
+ModePaiement TEXT NOT NULL,
+NumCommande INTEGER NOT NULL REFERENCES Commande(NumCommande)
+);
+
+CREATE TABLE IF NOT EXISTS LigneCommande (
+NumArticle INTEGER NOT NULL REFERENCES Article(NumArticle),
+NumCommande INTEGER NOT NULL REFERENCES Commande(NumCommande),
+Quantite INTEGER NOT NULL,
+PRIMARY KEY (NumArticle, NumCommande)
+) ;
+
+
+
